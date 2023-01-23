@@ -18,16 +18,6 @@ from improved_diffusion.script_util import (
     add_dict_to_argparser,
     args_to_dict,
 )
-from PIL import Image
-
-
-def postprocess(arr):
-    arr_post = arr.copy()
-    for i, img in enumerate(arr):
-        img[img < np.mean(img)] = 0
-        img[img >= np.mean(img)] = 255
-        arr_post[i] = img
-    return arr_post
 
 
 def main():
@@ -46,10 +36,21 @@ def main():
     model.to(dist_util.dev())
     model.eval()
 
-    logger.log("sampling...")
+    logger.log("generating interpolation roots from, to")
+    device = next(model.parameters()).device
+
+    # Generate interpolation roots
+    shape = (args.batch_size, 3, args.image_size, args.image_size)
+    img_from = th.randn(*shape, device=device)
+    img_to = th.randn(*shape, device=device)
+
+    # Generate interpolations
+    img_interpolants = [th.lerp(img_from, img_to, float(x / args.num_samples)) for x in range(args.num_samples)]
+
     all_images = []
     all_labels = []
-    while len(all_images) * args.batch_size < args.num_samples:
+    logger.log("sampling from, to...")
+    for noise_interpolated in img_interpolants:
         model_kwargs = {}
         if args.class_cond:
             classes = th.randint(
@@ -64,6 +65,7 @@ def main():
             (args.batch_size, 3, args.image_size, args.image_size),
             clip_denoised=args.clip_denoised,
             model_kwargs=model_kwargs,
+            noise=noise_interpolated,
         )
         sample = ((sample + 1) * 127.5).clamp(0, 255).to(th.uint8)
         sample = sample.permute(0, 2, 3, 1)
@@ -87,42 +89,27 @@ def main():
         label_arr = label_arr[: args.num_samples]
     if dist.get_rank() == 0:
         shape_str = "x".join([str(x) for x in arr.shape])
-        out_path = os.path.join(logger.get_dir(), f"samples_{shape_str}")
+        out_path = os.path.join(logger.get_dir(), f"samples_{shape_str}.npz")
         logger.log(f"saving to {out_path}")
-
-        if args.postprocess:
-            arr_post = postprocess(arr)
-
-        if args.output == "numpy":
-            if args.class_cond:
-                np.savez(out_path + '.npz', arr, label_arr)
-                np.savez(out_path + '_post.npz', arr_post, label_arr)
-            else:
-                np.savez(out_path + '.npz', arr)
-                np.savez(out_path + '_post.npz', arr_post)
-        elif args.output == "png":
-            for i, img in enumerate(arr):
-                Image.fromarray(img).save(out_path + f"_{i}.png")
-                if args.postprocess:
-                    Image.fromarray(arr_post[i]).save(out_path + f"_{i}_post.png")
+        if args.class_cond:
+            np.savez(out_path, arr, label_arr)
+        else:
+            np.savez(out_path, arr)
 
     dist.barrier()
     logger.log("sampling complete")
-    return arr_post if args.postprocess else arr
 
 
 def create_argparser():
     defaults = dict(
         clip_denoised=True,
         num_samples=10000,
-        batch_size=1,
+        batch_size=16,
         use_ddim=False,
         model_path="",
     )
     defaults.update(model_and_diffusion_defaults())
     parser = argparse.ArgumentParser()
-    parser.add_argument('--output', type=str, default='numpy', choices=['numpy', 'png'])
-    parser.add_argument('--postprocess', type=bool, default=True)
     add_dict_to_argparser(parser, defaults)
     return parser
 

@@ -12,6 +12,7 @@ import time
 import datetime
 import tempfile
 import warnings
+import wandb
 from collections import defaultdict
 from contextlib import contextmanager
 
@@ -93,6 +94,19 @@ class HumanOutputFormat(KVWriter, SeqWriter):
     def close(self):
         if self.own_file:
             self.file.close()
+
+
+class WanDBOutputFormat(KVWriter):
+    def __init__(self, filename):
+        self.name = filename
+        wandb.init(project="test-project", entity="kvasir-team")
+
+    def writekvs(self, kvs):
+        for k, v in kvs.items():
+            wandb.log({k: v})
+
+    def close(self):
+        wandb.save(f"{self.name}.onnx")
 
 
 class JSONOutputFormat(KVWriter):
@@ -200,6 +214,8 @@ def make_output_format(format, ev_dir, log_suffix=""):
         return CSVOutputFormat(osp.join(ev_dir, "progress%s.csv" % log_suffix))
     elif format == "tensorboard":
         return TensorBoardOutputFormat(osp.join(ev_dir, "tb%s" % log_suffix))
+    elif format == "wandb":
+        return WanDBOutputFormat(osp.join(ev_dir, "log%s.txt" % log_suffix))
     else:
         raise ValueError("Unknown format specified: %s" % (format,))
 
