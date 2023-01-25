@@ -102,9 +102,10 @@ def main():
                 np.savez(out_path + '_post.npz', arr_post)
         elif args.output == "png":
             for i, img in enumerate(arr):
-                Image.fromarray(img).save(out_path + f"_{i}.png")
                 if args.postprocess:
                     Image.fromarray(arr_post[i]).save(out_path + f"_{i}_post.png")
+                else:
+                    Image.fromarray(img).save(out_path + f"_{i}.png")
 
     dist.barrier()
     logger.log("sampling complete")

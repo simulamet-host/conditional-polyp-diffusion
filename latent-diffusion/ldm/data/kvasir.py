@@ -18,7 +18,7 @@ class SegmentationBase(Dataset):
     def __init__(self,
                  data_csv, data_root, segmentation_root,
                  size=None, random_crop=False, interpolation="bicubic",
-                 n_labels=182, shift_segmentation=False,
+                 n_labels=2, shift_segmentation=False,
                  ):
         self.n_labels = n_labels
         self.shift_segmentation = shift_segmentation
@@ -124,23 +124,20 @@ class KvasirSegEval(SegmentationBase):
                          n_labels=2)
 
 
-def generateCSV(dir, train=0.9, eval=0.1):
-    def write_lines(file, lines):
-        with open(file, 'w') as f:
-            for line in lines:
-                f.write(os.path.basename(line))
-                f.write('\n')
+def write_lines(file, lines):
+    with open(file, 'w') as f:
+        for line in lines:
+            f.write(os.path.basename(line))
+            f.write('\n')
 
+
+def generateKvasirCSV(dir, output, train=0.9):
     files = glob.glob(dir)
     random.shuffle(files)
     length = len(files)
 
     train_data = files[:int(train * length)]
-    write_lines('/home/user3574/PycharmProjects/myGit/latent-diffusion/data/kvasir/kvasir_train.txt', train_data)
+    write_lines(f'{output}/kvasir_train.txt', train_data)
 
     eval_data = files[int(train * length):]
-    write_lines('/home/user3574/PycharmProjects/myGit/latent-diffusion/data/kvasir/kvasir_eval.txt', eval_data)
-
-
-# if __name__ == '__main__':
-#     generateCSV("/home/user3574/PycharmProjects/myGit/latent-diffusion/data/kvasir/images/*.jpg")
+    write_lines(f'{output}/kvasir_eval.txt', eval_data)

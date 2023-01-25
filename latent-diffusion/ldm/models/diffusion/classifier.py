@@ -112,6 +112,7 @@ class NoisyLatentImageClassifier(pl.LightningModule):
         continuous_sqrt_alpha_cumprod = None
         if self.diffusion_model.use_continuous_noise:
             continuous_sqrt_alpha_cumprod = self.diffusion_model.sample_continuous_noise_level(x.shape[0], t + 1)
+            # todo: make sure t+1 is correct here
 
         return self.diffusion_model.q_sample(x_start=x, t=t, noise=noise,
                                              continuous_sqrt_alpha_cumprod=continuous_sqrt_alpha_cumprod)

@@ -6,14 +6,7 @@ import torch
 from segmentation_models_pytorch import utils as smp_utils
 from torch.utils.data import DataLoader
 from utils import *
-
-
-# Create model
-ENCODER = 'efficientnet-b4'
-ENCODER_WEIGHTS = 'imagenet'
-CLASSES = ['polyp']
-ACTIVATION = 'sigmoid'
-DEVICE = 'cuda'
+from shared import *
 
 
 if __name__ == '__main__':

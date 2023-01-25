@@ -6,7 +6,7 @@ from einops import rearrange, repeat
 import kornia
 
 
-from ldm.modules.x_transformer import Encoder, TransformerWrapper
+from ldm.modules.x_transformer import Encoder, TransformerWrapper  # TODO: can we directly rely on lucidrains code and simply add this as a reuirement? --> test
 
 
 class AbstractEncoder(nn.Module):
@@ -54,7 +54,7 @@ class BERTTokenizer(AbstractEncoder):
     """ Uses a pretrained BERT tokenizer by huggingface. Vocab size: 30522 (?)"""
     def __init__(self, device="cuda", vq_interface=True, max_length=77):
         super().__init__()
-        from transformers import BertTokenizerFast
+        from transformers import BertTokenizerFast  # TODO: add to reuquirements
         self.tokenizer = BertTokenizerFast.from_pretrained("bert-base-uncased")
         self.device = device
         self.vq_interface = vq_interface

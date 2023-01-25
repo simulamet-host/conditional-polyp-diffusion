@@ -166,6 +166,8 @@ class Searcher(object):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    # TODO: add n_neighbors and modes (text-only, text-image-retrieval, image-image retrieval etc)
+    # TODO: add 'image variation' mode when knn=0 but a single image is given instead of a text prompt?
     parser.add_argument(
         "--prompt",
         type=str,

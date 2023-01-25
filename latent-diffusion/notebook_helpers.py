@@ -2,6 +2,7 @@ from torchvision.datasets.utils import download_url
 from ldm.util import instantiate_from_config
 import torch
 import os
+# todo ?
 from google.colab import files
 from IPython.display import Image as ipyimg
 import ipywidgets as widgets
@@ -61,7 +62,7 @@ def get_custom_cond(mode):
     if mode == "superresolution":
         uploaded_img = files.upload()
         filename = next(iter(uploaded_img))
-        name, filetype = filename.split(".")
+        name, filetype = filename.split(".") # todo assumes just one dot in name !
         os.rename(f"{filename}", f"{dest}/{mode}/custom_{name}.{filetype}")
 
     elif mode == "text_conditional":
@@ -89,7 +90,7 @@ def get_cond_options(mode):
 
 
 def select_cond_path(mode):
-    path = "data/example_conditioning"
+    path = "data/example_conditioning"  # todo
     path = os.path.join(path, mode)
     onlyfiles = [f for f in sorted(os.listdir(path))]
 

@@ -32,6 +32,7 @@ model:
         num_heads: 8
     first_stage_config:
       target: ldm.models.autoencoder.VQModelInterface
+      ckpt_path: models/first_stage_models/vq-f4/model.ckpt
       params:
         embed_dim: 3
         n_embed: 8192
@@ -55,5 +56,5 @@ model:
       target: ldm.modules.encoders.modules.SpatialRescaler
       params:
         n_stages: 2
-        in_channels: 182
+        in_channels: 2 #182
         out_channels: 3

@@ -46,7 +46,7 @@ model:
       params:
         embed_dim: 3
         n_embed: 8192
-        ckpt_path: models/first_stage_models/vq-f4/model.ckpt
+        ckpt_path: /content/drive/MyDrive/VQGanTeeth/2022-10-29T10-34-42_vq_config/checkpoints/last.ckpt  #YOUR VQF4
         ddconfig:
           double_z: false
           z_channels: 3
@@ -68,13 +68,13 @@ model:
       target: ldm.modules.encoders.modules.SpatialRescaler
       params:
         n_stages: 2
-        in_channels: 2 # Kvasir channels (Boolean mask)
+        in_channels: 2
         out_channels: 3
 
 data:
   target: main.DataModuleFromConfig
   params:
-    batch_size: 12
+    batch_size: 8
     num_workers: 5
     wrap: False
     train:

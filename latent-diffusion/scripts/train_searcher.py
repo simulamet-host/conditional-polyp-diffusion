@@ -63,6 +63,7 @@ def train_searcher(opt,
                    metric='dot_product',
                    partioning_trainsize=None,
                    reorder_k=None,
+                   # todo tune
                    aiq_thld=0.2,
                    dims_per_block=2,
                    num_leaves=None,

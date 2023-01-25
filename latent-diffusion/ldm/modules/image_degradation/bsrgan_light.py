@@ -530,6 +530,7 @@ def degradation_bsrgan(img, sf=4, lq_patchsize=72, isp_model=None):
     return img, hq
 
 
+# todo no isp_model?
 def degradation_bsrgan_variant(image, sf=4, isp_model=None):
     """
     This is the degradation model of BSRGAN from the paper

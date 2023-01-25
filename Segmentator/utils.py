@@ -158,7 +158,3 @@ class Dataset(BaseDataset):
 
     def __len__(self):
         return len(self.ids)
-
-
-if __name__ == '__main__':
-    create_dataset()
