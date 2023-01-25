@@ -25,7 +25,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     img_sample = Image.open(args.image).convert('L')
-    h, w, ch = img_sample.shape
+    w, h = img_sample.size
     img_max_size = w if w > h else h
     img_size = (img_max_size, img_max_size)
 
@@ -45,8 +45,6 @@ if __name__ == '__main__':
             img_closest = img_train
             sim_closest = s
 
-        print("similarity: ", 100*sim_closest/(img_max_size*img_max_size), '%')
-        concatenated = concat_h(img_sample, img_closest)
-        concatenated.show()
-
-        input("Press enter to process next image")
+    print("similarity: ", 100*sim_closest/(img_max_size*img_max_size), '%')
+    concatenated = concat_h(img_sample, img_closest)
+    concatenated.show()
