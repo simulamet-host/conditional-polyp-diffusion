@@ -66,23 +66,4 @@ python improved-diffusion/scripts/image_compare.py {KVASIR_PATH} {MASK_IMAGE_PAT
 ```
 
 ### b) Segmentation model
-We can also train segmentation model(s) to compare quality of generated images.
-One example is to use Kvasir polyp images to train the model to distinguish polyps and use the model to 
-predict polyps in generated polyp images.
-
-Model specifications can be edited in ```Segmentator/shared.py```
-
-#### Training
-To train segmentator, use:
-```bash
-python seg_train.py
-```
-
-#### Testing
-To test segmentator, use:
-```bash
-python seg_test.py
-```
-If we generate data using the pipeline given above we will have polyps in ```latent-diffusion/results/```, 
-and corresponding masks in: ```latent-diffusion/data/samples/masks/```. 
-We can then replace data in ```Kvasir-SEG/test``` to test segmentation model on our generated polyps.
+Follow the instruction in [./segmentation_experiments](./segmentation_experiments)
