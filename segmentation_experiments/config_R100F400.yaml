@@ -1,0 +1,95 @@
+# pytorch_lightning==1.9.2
+seed_everything: true
+trainer:
+  logger: pytorch_lightning.loggers.WandbLogger
+  enable_checkpointing: true
+  callbacks: 
+      - class_path: pytorch_lightning.callbacks.ModelCheckpoint
+        init_args:
+            save_top_k: 1
+            monitor: "valid_dataset_iou"
+            mode: "max"
+            dirpath: "output/05_config"
+            filename: "best"
+  default_root_dir: null
+  gradient_clip_val: null
+  gradient_clip_algorithm: null
+  num_nodes: 1
+  num_processes: null
+  devices: [1]
+  gpus: null
+  auto_select_gpus: null
+  tpu_cores: null
+  ipus: null
+  enable_progress_bar: true
+  overfit_batches: 0.0
+  track_grad_norm: -1
+  check_val_every_n_epoch: 1
+  fast_dev_run: false
+  accumulate_grad_batches: null
+  max_epochs: 50
+  min_epochs: null
+  max_steps: -1
+  min_steps: null
+  max_time: null
+  limit_train_batches: null
+  limit_val_batches: null
+  limit_test_batches: null
+  limit_predict_batches: null
+  val_check_interval: null
+  log_every_n_steps: 50
+  accelerator: "gpu"
+  strategy: null
+  sync_batchnorm: false
+  precision: 32
+  enable_model_summary: true
+  num_sanity_val_steps: 2
+  resume_from_checkpoint: null
+  profiler: null
+  benchmark: null
+  deterministic: null
+  reload_dataloaders_every_n_epochs: 0
+  auto_lr_find: false
+  replace_sampler_ddp: true
+  detect_anomaly: false
+  auto_scale_batch_size: false
+  plugins: null
+  amp_backend: null
+  amp_level: null
+  move_metrics_to_cpu: false
+  multiple_trainloader_mode: max_size_cycle
+  inference_mode: true
+model:
+  arch: UnetPlusPlus
+  encoder_name: resnet34
+  in_channels: 3
+  out_classes: 1
+  lr: 0.0001
+  test_print_batch_id: 0
+  test_print_num: 5
+  encoder_weights: imagenet
+data:
+  encoder: se_resnext50_32x4d
+  encoder_weight: imagenet
+  bs: 8
+  num_workers: 4
+  data:
+    train:
+    - img_dir: "/work/vajira/DL/roman_diffusion_model/conditional-polyp-diffusion/Kvasir-SEG/train/images"
+      mask_dir: "/work/vajira/DL/roman_diffusion_model/conditional-polyp-diffusion/Kvasir-SEG/train/masks"
+      num_samples: 100
+    - img_dir: "/work/vajira/DL/roman_diffusion_model/Models/results_135/samples" # fake samples
+      mask_dir: "/work/vajira/DL/roman_diffusion_model/Models/200" # input masks are here
+      num_samples: 400
+    validation:
+    - img_dir: "/work/vajira/DL/roman_diffusion_model/conditional-polyp-diffusion/Kvasir-SEG/test/images"
+      mask_dir: "/work/vajira/DL/roman_diffusion_model/conditional-polyp-diffusion/Kvasir-SEG/test/masks"
+      num_samples: -1
+    - img_dir: "/work/vajira/DL/roman_diffusion_model/conditional-polyp-diffusion/Kvasir-SEG/val/images"
+      mask_dir: "/work/vajira/DL/roman_diffusion_model/conditional-polyp-diffusion/Kvasir-SEG/val/masks"
+      num_samples: -1
+wandb_name: 05_config
+wandb_entity: simulamet_mlc
+wandb_project: diffusion_polyp
+output_dir: output/05_config
+ckpt_path: null
