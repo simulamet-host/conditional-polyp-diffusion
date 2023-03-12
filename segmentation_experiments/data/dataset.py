@@ -101,6 +101,7 @@ class Dataset(BaseDataset):
     def __len__(self):
         return len(self.images)
     
+# This section is just for testing.
 if __name__=="__main__":
     test_dataset = Dataset(img_dir="/work/vajira/DL/roman_diffusion_model/Models/results_135/samples",
                               mask_dir = "/work/vajira/DL/roman_diffusion_model/Models/200")

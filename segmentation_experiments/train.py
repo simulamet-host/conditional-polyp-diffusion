@@ -4,8 +4,6 @@
 #             * https://pytorch-lightning.readthedocs.io/en/stable/
 #=========================================================
 
-
-
 import argparse
 from omegaconf import OmegaConf
 from datetime import datetime
@@ -23,28 +21,17 @@ from torch.optim import lr_scheduler
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from torchvision import models, transforms,datasets, utils
-from torchvision.utils import save_image
-#from torch.utils.tensorboard import SummaryWriter
+
 from torch.autograd import Variable
-#from torchsummary import summary
+
 
 import segmentation_models_pytorch as smp
 import pytorch_lightning as pl
-#from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.cli import LightningCLI
-from einops import rearrange
-
-#from pytorch_lightning.demos.boring_classes import DemoModel, BoringDataModule
+#from einops import rearrange
 import pandas as pd
 
-#from data.dataset import Dataset
-from data.prepare_data import PolypDataModule
-#from data.prepare_data import prepare_data_from_multiple_dirs as prepare_data
-#from data import PolypsDatasetWithGridEncoding
-#from data import PolypsDatasetWithGridEncoding_TestData
-#import pyra_pytorch as pyra
-#from utils import dice_coeff, iou_pytorch, visualize
-
+from data.prepare_data import PolypDataModule # custom data module
 import segmentation_models_pytorch as smp
 import wandb
 from pytorch_lightning.loggers import WandbLogger
@@ -282,12 +269,6 @@ class PolypModel(pl.LightningModule):
             #plt.imsave(f"{self.output_dir}/image_before_{i}.png", img_before) 
             
         
-            
-        # logger.log_image(key=f"samples_{i}", images=[img, mask])
-        #plt.imsave("test_pred_mask_1.png",outputs[0]["image_origin"][0][1,:, :].cpu().numpy())
-        #img = Image.fromarray(outputs[0]["image"][0].permute(1,2,0).cpu().numpy())
-        #img = img.save("test_img.png")
-            
     
     def predict_step(self, batch, batch_idx):
         image = batch["image"]
@@ -313,10 +294,6 @@ class MyLightningCLI(LightningCLI):
         parser.add_argument("--wandb_entity", default="simulamet_mlc")
         parser.add_argument("--wandb_project", default="diffusion_polyp")
         parser.add_argument("--output_dir", default="output/new_3")
-        #parser.set_defaults({"model.output_dir": "output/test/"})
-        
-        #parser.set_defaults({"model.config"})
-        #parser.link_arguments("trainer.callbacks[" + str(0) +"]", "model.output_dir")
         parser.link_arguments("output_dir", "model.output_dir")
         parser.link_arguments("wandb_name", "model.wandb_name")
         
@@ -347,14 +324,6 @@ def cli_main():
 
 if __name__ == "__main__":
 
-    
-    # Setup Wandb using input yaml file
-    #conf = OmegaConf.from_cli() # get input arguments
-    #conf_yaml = OmegaConf.load(conf["--config"]) # get input yaml passed in command line
-    
-    # Setup wandb logger using given entity , project and name (change these as you want)
-    #logger = WandbLogger(entity=conf_yaml.wandb_entity, project=conf_yaml.wandb_project,
-    #                             name=conf_yaml.wandb_name)
     cli_main() # Pytorch lightning command line interface 
     wandb.finish() # Finish Wandb
 

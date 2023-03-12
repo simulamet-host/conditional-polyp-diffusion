@@ -7,21 +7,6 @@ import segmentation_models_pytorch as smp
 
 from data.dataset import Dataset
 import pytorch_lightning as pl
-from pprint import pprint
-
-'''
-def df_from_csv_file_array(csv_file_arrya):
-
-    df =pd.DataFrame(columns=["image", "path"])
-
-    for csv in csv_file_arrya:
-        temp_df = pd.read_csv(csv)
-
-        df = df.append(temp_df)
-
-    return df
-
-'''
 
 def get_training_augmentation():
     train_transform = [
@@ -106,110 +91,6 @@ def get_preprocessing(preprocessing_fn):
 
 
 
-def prepare_data(opt, preprocessing_fn):
-
-
-    
-    train_df = df_from_csv_file_array(opt.train_CSVs)
-    val_df = df_from_csv_file_array(opt.val_CSVs)
-
-
-    train_dataset = Dataset(
-        train_df,
-        grid_sizes=opt.grid_sizes_train,
-        augmentation=get_training_augmentation(), 
-        preprocessing=get_preprocessing(preprocessing_fn),
-        classes=opt.classes,
-        pyra = opt.pyra
-    )
-
-    valid_dataset = Dataset(
-        val_df, 
-        grid_sizes=opt.grid_sizes_val,
-        augmentation=get_validation_augmentation(), 
-        preprocessing=get_preprocessing(preprocessing_fn),
-        classes=opt.classes,
-        pyra = opt.pyra
-    )
-
-    train_loader = DataLoader(train_dataset, batch_size=opt.bs, shuffle=True, num_workers=12)
-    valid_loader = DataLoader(valid_dataset, batch_size=opt.val_bs, shuffle=False, num_workers=4)
-
-    
-   
-    print("dataset train=", len(train_dataset))
-    print("dataset val=", len(valid_dataset))
-
-    return train_loader, valid_loader
-
-
-
-'''
-def prepare_data_from_multiple_dirs(conf, preprocessing_fn):
-    
-    datasets = []
-    
-    # Train data
-    for d in conf.data.train:
-        data_sub = Dataset(
-                        d.img_dir,
-                        d.mask_dir,
-                        augmentation=get_training_augmentation(), 
-                        preprocessing=get_preprocessing(preprocessing_fn))
-        
-        if d.num_samples > 0:
-            data_sub = Subset(data_sub, [i for i in range(d.num_samples)])
-        
-        datasets.append(data_sub)
-        
-    train_dataset = ConcatDataset(datasets)
-    
-    
-    datasets = []
-    # Valiation data
-    for d in conf.data.validation:
-        data_sub = Dataset(
-                        d.img_dir,
-                        d.mask_dir,
-                        augmentation=get_training_augmentation(), 
-                        preprocessing=get_preprocessing(preprocessing_fn))
-        
-        if d.num_samples > 0:
-            data_sub = Subset(data_sub, [i for i in range(d.num_samples)])
-            
-        datasets.append(data_sub)
-        
-    validation_dataset = ConcatDataset(datasets)
-
-    train_loader = DataLoader(train_dataset, batch_size=conf.bs, shuffle=True, num_workers=12)
-    valid_loader = DataLoader(validation_dataset, batch_size=conf.val_bs, shuffle=False, num_workers=4)
-
-    
-   
-    print("dataset train=", len(train_dataset))
-    print("dataset val=", len(validation_dataset))
-
-    return train_loader, valid_loader
-
-def prepare_test_data(opt, preprocessing_fn):
-
-    test_df = df_from_csv_file_array(opt.test_CSVs)
-
-    # test dataset without transformations for image visualization
-    test_dataset = Dataset(
-        test_df,
-        grid_sizes=opt.grid_sizes_test,
-        augmentation=get_validation_augmentation(), 
-        preprocessing=get_preprocessing(preprocessing_fn),
-        classes=opt.classes,
-        pyra = opt.pyra
-    )
-
-    print("Test dataset size=", len(test_dataset))
-
-    return test_dataset
-
-'''
 
 # Pytorch lightning DataModule
 
