@@ -67,3 +67,9 @@ python improved-diffusion/scripts/image_compare.py {KVASIR_PATH} {MASK_IMAGE_PAT
 
 ### b) Segmentation model
 Follow the instruction in [./segmentation_experiments](./segmentation_experiments)
+
+## Contact details:
+vajira@simula.no or ro.machacek0@gmail.com
+
+
+## Citation:
