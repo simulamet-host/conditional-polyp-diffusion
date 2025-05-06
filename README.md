@@ -73,3 +73,21 @@ vajira@simula.no or ro.machacek0@gmail.com
 
 
 ## Citation:
+@inproceedings{10.1145/3592571.3592978,
+author = {Mach\'{a}\v{c}ek, Roman and Mozaffari, Leila and Sepasdar, Zahra and Parasa, Sravanthi and Halvorsen, P\r{a}l and Riegler, Michael A. and Thambawita, Vajira},
+title = {Mask-conditioned latent diffusion for generating gastrointestinal polyp images},
+year = {2023},
+isbn = {9798400701863},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3592571.3592978},
+doi = {10.1145/3592571.3592978},
+abstract = {In order to take advantage of artificial intelligence (AI) solutions in endoscopy diagnostics, we must overcome the issue of limited annotations. These limitations are caused by the high privacy concerns in the medical field and the requirement of getting aid from experts for the time-consuming and costly medical data annotation process. In computer vision, image synthesis has made a significant contribution in recent years, as a result of the progress of generative adversarial networks (GANs) and diffusion probabilistic models (DPMs). Novel DPMs have outperformed GANs in text, image, and video generation tasks. Therefore, this study proposes a conditional DPM framework to generate synthetic gastrointestinal (GI) polyp images conditioned on given generated segmentation masks. Our experimental results show that our system can generate an unlimited number of high-fidelity synthetic polyp images with the corresponding ground truth masks of polyps. To test the usefulness of the generated data we trained binary image segmentation models to study the effect of using synthetic data. Results show that the best micro-imagewise intersection over union (IOU) of 0.7751 was achieved from DeepLabv3+ when the training data consists of both real data and synthetic data. However, the results reflect that achieving good segmentation performance with synthetic data heavily depends on model architectures.},
+booktitle = {Proceedings of the 4th ACM Workshop on Intelligent Cross-Data Analysis and Retrieval},
+pages = {1–9},
+numpages = {9},
+keywords = {polyp segmentation, polyp generative model, generating synthetic data, diffusion model},
+location = {Thessaloniki, Greece},
+series = {ICDAR '23}
+}
+
